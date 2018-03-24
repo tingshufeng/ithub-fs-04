@@ -16,27 +16,59 @@
       </a>
       <h1>用户登录</h1>
     </div>
-    <form>
+    <form id="signin_form">
       <div class="form-group">
-        <label for="exampleInputEmail1">邮箱</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" autofocus>
+        <label for="inputEmail">邮箱</label>
+        <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" autofocus required>
       </div>
       <div class="form-group">
-        <label for="exampleInputPassword1">密码</label>
+        <label for="inputPassword">密码</label>
         <a class="pull-right" href="">忘记密码？</a>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password" required>
       </div>
       <div class="checkbox">
         <label>
           <input type="checkbox">记住我
         </label>
       </div>
-      <button type="button" class="btn btn-success btn-block">登录</button>
+      <button type="submit" class="btn btn-success btn-block">登录</button>
     </form>
     <div class="message">
       <p>没有账号? <a href="/register">点击创建</a>.</p>
     </div>
   </div>
+  <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript">
+        $('#signin_form').on('submit',function(){
+          // var formData = $(this).serialize()    
+          // console.log(formData)
+        $.ajax({
+            url: '/signin',
+            type: 'post',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(data){
+              console.log(data)
+              // switch (data.code) {
+              //   case 0:
+              //     window.location.href = "/"
+              //   break
+              //   case 1:
+              //     window.alert('邮箱已被占用！')
+              //   break
+              //   case 2:
+              //     window.alert('此昵称已被占用！')
+              //   break
+              // }
+            },
+            error: function(err){
+                console.log(err)
+            }
+        })
+        return false
+      })
+
+  </script>
 </body>
 
 </html>
