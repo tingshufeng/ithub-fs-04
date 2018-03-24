@@ -42,6 +42,9 @@ exports.signin = (req,res) => {
 			})
 		}
 
+		// 持久化保存用户登录信息
+		req.session.user = result  
+
 		// 如果邮箱和密码都正确，则返回
 		res.status(200).json({
 			code: 0,
@@ -116,6 +119,8 @@ exports.signup = (req,res) => {
 			// 插入数据   save()
 
 			body.password = md5(body.password)
+
+			
 			user.save(body,(err,result) => {
 				if(err) {
 					return res.status(500).json({
@@ -123,6 +128,13 @@ exports.signup = (req,res) => {
 						// err 错误对象有一个message属性是具体的错误信息
 					})
 				}
+
+				// 持久化保存用户信息
+				// 注册即登录(使用Session保存用户登录状态)
+				// req.session.user = {
+				// 	...body,
+				// 	id: result.insertId    //注册的账号id就是注册成功后返回信息信息中的insertedId
+				// }
 
 				res.status(200).json({
 					code: 0,
