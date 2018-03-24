@@ -48,18 +48,18 @@
             data: $(this).serialize(),
             dataType: 'json',
             success: function(data){
-              console.log(data)
-              // switch (data.code) {
-              //   case 0:
-              //     window.location.href = "/"
-              //   break
-              //   case 1:
-              //     window.alert('邮箱已被占用！')
-              //   break
-              //   case 2:
-              //     window.alert('此昵称已被占用！')
-              //   break
-              // }
+              // console.log(data)
+              switch (data.code) {
+                case 0:
+                  window.location.href = "/"
+                break
+                case 1:
+                  window.alert('用户不存在！')
+                break
+                case 2:
+                  window.alert('密码无效！')
+                break
+              }
             },
             error: function(err){
                 console.log(err)

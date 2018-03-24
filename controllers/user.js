@@ -3,18 +3,60 @@ const user = require('../models/user')
 
 const md5 = require('blueimp-md5')
 
+// 展示登录表单
 exports.showSignin = (req,res) => {
 	// res.send('get showSignin')
 	res.render('signin.html')
 }
+
+// 处理登录请求
 exports.signin = (req,res) => {
-	res.send('post signin')
+	// res.send('post signin')
+	// 接收表单提交的数据
+	// 普通数据校验
+	// 业务数据校验
+	// 持久化存储用户信息
+	// 发送响应
+	const body = req.body
+	// 校验用户是否存在
+	user.findByEmail(body.email,(err,result) => {
+		if(err){
+			return res.status(500).json({
+				err: err.message
+			})
+		}
+
+		if(!result) {   //如果用户不存在
+			return res.status(200).json({
+				code: 1,
+				message: 'email not exists'
+			})
+		}
+
+		// 校验密码(加密的用户输入的密码和数据库中的密码做比较)
+		if(md5(body.password) !== result.password){
+			// 如果输入的密码和数据库中的密码不相等
+			return res.status(200).json({
+				code: 2,
+				message: 'password invaild'   //密码不正确
+			})
+		}
+
+		// 如果邮箱和密码都正确，则返回
+		res.status(200).json({
+			code: 0,
+			message: 'success'
+		})
+	})
 }
+
+// 展示注册表单
 exports.showSignup = (req,res) => {
 	// res.send('get showSignup')
 	res.render('signup.html')
 }
 
+// 处理注册请求
 exports.signup = (req,res) => {
 	// res.send('post signup')
 	// res.status(200).json({"foo":"bar","name":"jack"})
@@ -82,7 +124,7 @@ exports.signup = (req,res) => {
 					})
 				}
 
-				return res.status(200).json({
+				res.status(200).json({
 					code: 0,
 					message: 'success'
 				})
