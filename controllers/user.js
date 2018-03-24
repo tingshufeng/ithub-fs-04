@@ -147,4 +147,10 @@ exports.signup = (req,res) => {
 
 exports.signout = (req,res) => {
 	res.send('post signout')
+
+	// 清除session信息
+	// delete req.session.user
+
+	// // 重定向到登录页
+	// res.redirect('/signin')
 }
