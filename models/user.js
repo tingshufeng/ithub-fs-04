@@ -2,7 +2,7 @@
 const { query } = require('../utilities/db-helper')
 
 exports.findByEmail = (email,callback) => {
-	query('SELECT * FROM `users` WHERE email = ?', [email], (err,results) => {
+	query('SELECT * FROM `users` WHERE `email` = ?', [email], (err,results) => {
 		if(err){
 			return callback(err)
 		}
@@ -11,7 +11,7 @@ exports.findByEmail = (email,callback) => {
 }
 
 exports.findByNickname = (nickname,callback) => {
-	query('SELECT * FROM `users` WHERE nickname = ?', [nickname], (err,results) => {
+	query('SELECT * FROM `users` WHERE `nickname` = ?', [nickname], (err,results) => {
 		if(err){
 			return callback(err)
 		}
@@ -20,6 +20,8 @@ exports.findByNickname = (nickname,callback) => {
 }
 
 exports.save = (user,callback) => {
+	user.createdAt = null    
+	// 创建时间给一个 null，数据会自动生成当前时间戳
 	const strSql = 'INSERT INTO `users` SET ?'
 	query(strSql, user, (err,results) => {
 		if(err){

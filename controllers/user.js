@@ -1,6 +1,8 @@
 // 加载models中的用户模块
 const user = require('../models/user')
 
+const md5 = require('blueimp-md5')
+
 exports.showSignin = (req,res) => {
 	// res.send('get showSignin')
 	res.render('signin.html')
@@ -27,7 +29,7 @@ exports.signup = (req,res) => {
 	const body = req.body
 
 	// 校验邮箱   findByEmail
-	user.findByEmail(body.email,(err,user) => {
+	user.findByEmail(body.email,(err,result) => {
 		if(err) {
 			return res.status(500).json({
 				error: err.message  
@@ -35,22 +37,60 @@ exports.signup = (req,res) => {
 			})
 		}
 
-		if(user) {
+		if(result) {
 			return res.status(200).json({
 				code: 1,
-				message: '邮箱被占用'
+				message: 'email exists'
 			})
 		}
 
-		return res.status(200).json({
-			code: 0,
-			message: '注册成功！'
+		// return res.status(200).json({
+		// 	code: 0,
+		// 	message: 'success'
+		// })
+
+		// 校验昵称   findByNichname
+		user.findByNickname(body.nickname,(err,result) => {
+			if(err) {
+				return res.status(500).json({
+					error: err.message  
+					// err 错误对象有一个message属性是具体的错误信息
+				})
+			}
+
+			if(result) {
+				return res.status(200).json({
+					code: 2,
+					message: 'nickname exists'
+				})
+			}
+
+			// return res.status(200).json({
+			// 	code: 0,
+			// 	message: 'success'
+			// })
+
+			// 如果邮箱和昵称都没有被占用，就该保存数据了
+			// 插入数据   save()
+
+			body.password = md5(body.password)
+			user.save(body,(err,result) => {
+				if(err) {
+					return res.status(500).json({
+						error: err.message  
+						// err 错误对象有一个message属性是具体的错误信息
+					})
+				}
+
+				return res.status(200).json({
+					code: 0,
+					message: 'success'
+				})
+			})
 		})
 	})
-	// 校验昵称   findByNichname
-	// 插入数据   save()
-
 }
+
 exports.signout = (req,res) => {
 	res.send('post signout')
 }
