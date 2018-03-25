@@ -41,6 +41,20 @@ app.use(userRouter)
 app.use('/topic',topicRouter)
 // app.use(commentRouter)
 
+
+//错误处理中间件
+// 他需要显示的接收 4 个参数
+// err 错误对象
+// req 请求对象
+// res 响应对象
+// next 下一个中间件
+app.use((err,req,res,next) => {
+	console.error(err.stack)
+	res.status(500).send({
+		error: err.message
+	})
+})
+
 app.listen(3000,() => {
 	console.log('running.....')
 })

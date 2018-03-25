@@ -2,10 +2,10 @@ const express = require('express')
 
 const router = express.Router()
 
-const indexController = require('./controllers/index')
-const userController = require('./controllers/user')
-const topicController = require('./controllers/topic')
-const commentController = require('./controllers/comment')
+const indexController = require('../controllers/index')
+const userController = require('../controllers/user')
+const topicController = require('../controllers/topic')
+const commentController = require('../controllers/comment')
 
 // 首页相关
 router

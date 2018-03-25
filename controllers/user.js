@@ -4,13 +4,13 @@ const user = require('../models/user')
 const md5 = require('blueimp-md5')
 
 // 展示登录表单
-exports.showSignin = (req,res) => {
+exports.showSignin = (req,res,next) => {
 	// res.send('get showSignin')
 	res.render('signin.html')
 }
 
 // 处理登录请求
-exports.signin = (req,res) => {
+exports.signin = (req,res,next) => {
 	// res.send('post signin')
 	// 接收表单提交的数据
 	// 普通数据校验
@@ -21,9 +21,12 @@ exports.signin = (req,res) => {
 	// 校验用户是否存在
 	user.findByEmail(body.email,(err,result) => {
 		if(err){
-			return res.status(500).json({
-				err: err.message
-			})
+			// return res.status(500).json({
+			// 	err: err.message
+			// })
+
+			// 传参的 next 方法会自动向后匹配到具有 4 个参数的应用程序级别处理中间件
+			return next(err)
 		}
 
 		if(!result) {   //如果用户不存在
@@ -54,13 +57,13 @@ exports.signin = (req,res) => {
 }
 
 // 展示注册表单
-exports.showSignup = (req,res) => {
+exports.showSignup = (req,res,next) => {
 	// res.send('get showSignup')
 	res.render('signup.html')
 }
 
 // 处理注册请求
-exports.signup = (req,res) => {
+exports.signup = (req,res,next) => {
 	// res.send('post signup')
 	// res.status(200).json({"foo":"bar","name":"jack"})
 	// console.log(req.body)
@@ -76,10 +79,12 @@ exports.signup = (req,res) => {
 	// 校验邮箱   findByEmail
 	user.findByEmail(body.email,(err,result) => {
 		if(err) {
-			return res.status(500).json({
-				error: err.message  
-				// err 错误对象有一个message属性是具体的错误信息
-			})
+			// return res.status(500).json({
+			// 	error: err.message  
+			// 	// err 错误对象有一个message属性是具体的错误信息
+			// })
+
+			return next(err)
 		}
 
 		if(result) {
@@ -97,10 +102,12 @@ exports.signup = (req,res) => {
 		// 校验昵称   findByNichname
 		user.findByNickname(body.nickname,(err,result) => {
 			if(err) {
-				return res.status(500).json({
-					error: err.message  
-					// err 错误对象有一个message属性是具体的错误信息
-				})
+				// return res.status(500).json({
+				// 	error: err.message  
+				// 	// err 错误对象有一个message属性是具体的错误信息
+				// })
+
+				return next(err)
 			}
 
 			if(result) {
@@ -123,10 +130,12 @@ exports.signup = (req,res) => {
 			
 			user.save(body,(err,result) => {
 				if(err) {
-					return res.status(500).json({
-						error: err.message  
-						// err 错误对象有一个message属性是具体的错误信息
-					})
+					// return res.status(500).json({
+					// 	error: err.message  
+					// 	// err 错误对象有一个message属性是具体的错误信息
+					// })
+
+					return next(err)
 				}
 
 				// 持久化保存用户信息
@@ -136,6 +145,7 @@ exports.signup = (req,res) => {
 				// 	id: result.insertId    //注册的账号id就是注册成功后返回信息信息中的insertedId
 				// }
 
+				// console.log(req.session.user)
 				res.status(200).json({
 					code: 0,
 					message: 'success'
@@ -145,12 +155,12 @@ exports.signup = (req,res) => {
 	})
 }
 
-exports.signout = (req,res) => {
-	res.send('post signout')
+exports.signout = (req,res,next) => {
+	// res.send('post signout')
 
 	// 清除session信息
-	// delete req.session.user
+	delete req.session.user
 
-	// // 重定向到登录页
-	// res.redirect('/signin')
+	// 重定向到登录页
+	res.redirect('/signin')
 }
