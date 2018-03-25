@@ -1,9 +1,19 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const MySQLStore = require('express-mysql-session')(session);
+const responseTime = require('response-time')
+const compression = require('compression')
+const { checkLogin } = require('./middlewares/auth')
+const { dbConfig } = require('./config')
+
+const sessionStore = new MySQLStore(dbConfig);
+
 const app = express()
 
-const { checkLogin } = require('./middlewares/auth')
+// 压缩所有响应
+app.use(compression())
+
 
 // 加载路由模块
 // const router = require('./router')
@@ -11,6 +21,9 @@ const indexRouter = require('./routes/index')
 const userRouter = require('./routes/user')
 const topicRouter = require('./routes/topic')
 // const commentRouter = require('./routes/comment')
+
+// 配置响应时间
+app.use(responseTime())     
 
 // 配置模板引擎 
 app.engine('html',require('express-art-template'))
@@ -26,10 +39,16 @@ app.use('/public',express.static('./public/'))
 
 // 该插件会为 req 请求对象添加一个成员：req.session 默认是一个对象
 // 这是最简单的配置方式，暂且先不用关心里面参数的含义
-app.use(session({
+app.use(session({    //服务器重启 session 不会丢失
   // 配置加密字符串，它会在原有加密基础之上和这个字符串拼起来去加密
   // 目的是为了增加安全性，防止客户端恶意伪造
   secret: 'itcast',
+  store: sessionStore,
+  // 配置cookie的过期时间在3天后(关闭浏览器session数据不会丢失)
+  cookie: {
+  	maxAge: 1000 * 60 * 60 * 24 * 3
+  },
+
   resave: false,
   saveUninitialized: false // 无论你是否使用 Session ，我都默认直接给你分配一把钥匙
 }))
