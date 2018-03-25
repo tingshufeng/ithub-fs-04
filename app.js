@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const app = express()
 
+const { checkLogin } = require('./middlewares/auth')
+
 // 加载路由模块
 // const router = require('./router')
 const indexRouter = require('./routes/index')
@@ -46,7 +48,7 @@ app.use((req,res,next) => {
 // app.use(router)
 app.use(indexRouter)
 app.use(userRouter)
-app.use('/topic',topicRouter)
+app.use('/topic',checkLogin,topicRouter)
 // app.use(commentRouter)
 
 
