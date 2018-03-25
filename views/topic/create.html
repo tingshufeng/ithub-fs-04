@@ -11,14 +11,13 @@
   <section class="container">
   <div class="row">
     <div class="col-md-5">
-      <form>
+      <form id="form" method="post" action="/topic/create">
         <div class="form-group">
           <label for="exampleInputEmail1">选择板块</label>
           <select class="form-control">
-            <option>分享</option>
-            <option>问答</option>
-            <option>招聘</option>
-            <option>客户端测试</option>
+            {{each topics}}
+            <option value="{{$value.id}}">{{$value.name}}</option>
+            {{/each}}
           </select>
         </div>
         <div class="form-group">
@@ -37,6 +36,16 @@
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
+  <script type="text/javascript">
+    $form = $('#form')
+    $form.on('submit',function(e){
+      e.preventDefault()
+      $form.ajaxSubmit(function(data){
+        console.log(data)
+      })
+    })
+  </script>
 </body>
 
 </html>
