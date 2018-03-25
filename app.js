@@ -4,7 +4,11 @@ const session = require('express-session')
 const app = express()
 
 // 加载路由模块
-const router = require('./router')
+// const router = require('./router')
+const indexRouter = require('./routes/index')
+const userRouter = require('./routes/user')
+const topicRouter = require('./routes/topic')
+// const commentRouter = require('./routes/comment')
 
 // 配置模板引擎 
 app.engine('html',require('express-art-template'))
@@ -31,8 +35,12 @@ app.use(session({
 
 // 配置解析表单请求体
 // 挂载路由容器到 app 应用程序中使用生效
-app.use(router)
+// app.use(router)
+app.use(indexRouter)
+app.use(userRouter)
+app.use('/topic',topicRouter)
+// app.use(commentRouter)
 
 app.listen(3000,() => {
-	console.log('running......')
+	console.log('running.....')
 })
