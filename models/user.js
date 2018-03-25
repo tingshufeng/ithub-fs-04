@@ -20,7 +20,6 @@ exports.findByNickname = (nickname,callback) => {
 }
 
 exports.save = (user,callback) => {
-	user.createdAt = null    
 	// 创建时间给一个 null，数据会自动生成当前时间戳
 	const strSql = 'INSERT INTO `users` SET ?'
 	query(strSql, user, (err,results) => {

@@ -1,6 +1,8 @@
 // 加载models中的用户模块
 const user = require('../models/user')
 
+const moment = require('moment')
+
 const md5 = require('blueimp-md5')
 
 // 展示登录表单
@@ -126,7 +128,7 @@ exports.signup = (req,res,next) => {
 			// 插入数据   save()
 
 			body.password = md5(body.password)
-
+			body.createdAt = moment().format('YYYY-MM-DD HH:mm:ss')
 			
 			user.save(body,(err,result) => {
 				if(err) {
