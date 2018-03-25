@@ -32,6 +32,14 @@ app.use(session({
   saveUninitialized: false // 无论你是否使用 Session ，我都默认直接给你分配一把钥匙
 }))
 
+// 模板引擎中可以访问到app.locals中的成员，不需要向模板中传递
+// 该中间件一定要写在配置 Session 中间件之后，路由之前
+// 因为在 Session 之后才可以访问到 req.session 这个对象
+// 在路由之前就要携带 Session 信息
+app.use((req,res,next) => {
+	app.locals.user = req.session.user
+	next()
+})
 
 // 配置解析表单请求体
 // 挂载路由容器到 app 应用程序中使用生效

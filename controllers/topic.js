@@ -1,5 +1,8 @@
 exports.showCreate = (req,res,next) => {
-	res.send('get showCreate')
+	// res.send('get showCreate')
+	res.render('topic/create.html',{
+
+	})
 }
 
 exports.create = (req,res,next) => {
