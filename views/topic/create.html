@@ -36,8 +36,15 @@
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/editor/0.1.0/editor.css">
+  <script src="//cdn.jsdelivr.net/editor/0.1.0/editor.js"></script>
+  <script src="//cdn.jsdelivr.net/editor/0.1.0/marked.js"></script>
   <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
   <script type="text/javascript">
+    // 富文本编辑器初始化
+    const editor = new Editor()
+    editor.render()
+
     $form = $('#form')
     $form.on('submit',function(e){
       e.preventDefault()
@@ -45,10 +52,11 @@
         // console.log(data)
         switch (data.code){
           case 0:
-            window.location.href = '/'
+            window.location.href = data.address.redirect
           break
         }
       })
+      // console.log(editor.codemirror.getValue())
     })
   </script>
 </body>

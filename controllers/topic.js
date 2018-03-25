@@ -1,8 +1,8 @@
 const topic = require('../models/topic')
 const marked = require('marked')
-
 const moment = require('moment')
 
+// 展示话题表单
 exports.showCreate = (req,res,next) => {
 	// res.send('get showCreate')
 	topic.findAll((err,topics) => {
@@ -16,7 +16,7 @@ exports.showCreate = (req,res,next) => {
 	
 }
 
-
+// 出来添加话题请求
 exports.create = (req,res,next) => {
 	// res.send('post create')
 	// 1、获取表单提交的数据
@@ -37,6 +37,9 @@ exports.create = (req,res,next) => {
 		}
 		res.status(200).json({
 			code:0,
+			address: {
+				redirect: `/topic/${result.insertId}`
+			},
 			message: 'success'
 		})
 	})
