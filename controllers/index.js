@@ -9,6 +9,5 @@ exports.showIndex = (req,res,next) => {
 		// 	next(err)
 		// }
 
-	res.render('index.html',{
-	})
+	res.render('index.html')
 }
