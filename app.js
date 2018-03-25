@@ -65,6 +65,11 @@ app.use((err,req,res,next) => {
 	})
 })
 
+// 当前面所有的中间件这都匹配不上时就进入该中间件
+app.use((req,res,next) => {
+	res.render('404.html')
+})
+
 app.listen(3000,() => {
 	console.log('running.....')
 })
