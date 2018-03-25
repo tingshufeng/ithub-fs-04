@@ -1,4 +1,5 @@
 const topic = require('../models/topic')
+const marked = require('marked')
 
 const moment = require('moment')
 
@@ -42,7 +43,25 @@ exports.create = (req,res,next) => {
 }
 
 exports.showDetail = (req,res,next) => {
-	res.send('get showDetail')
+	// res.send('get showDetail')
+	// 获取动态数据
+	const {topicId} = req.params
+	// console.log(topicId)
+	topic.findById(topicId,(err,topic) => {
+		if(err){
+			return next(err)
+		}
+
+		// if(topic){
+		// 	return topic.content = marked(topic.content)
+		// }
+
+		topic && (topic.content = marked(topic.content))
+
+		res.render('topic/show.html',{
+			topic
+		})
+	})
 }
 
 exports.showEdit = (req,res,next) => {
