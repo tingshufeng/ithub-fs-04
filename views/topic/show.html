@@ -25,6 +25,14 @@
       {{ else }}
         <div class="alert alert-danger" role="alert">此话题不存在或已被删除。</div>
       {{ /if }}
+
+      {{if topic.userId === user.id}}
+        <p>
+          <a href="#">编辑</a>
+          <a href="/topic/{{topic.id}}/delete" id="remove">删除</a>
+        </p>
+      {{/if}}
+
       <div class="panel panel-default">
         <div class="panel-heading">
           <span>lipengzhou</span> commented 
@@ -109,6 +117,26 @@
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script type="text/javascript">
+    $('#remove').on('click',function(e){
+      e.preventDefault()
+      if(!window.confirm('Are you sure delete me?')){
+        return 
+      }
+      // console.log('yes')
+      // 获取当前的话题id
+      var url = $(this).attr('href')
+      // console.log($(this).attr('href'))
+      $.post(url,function(data){
+        // console.log(data)
+        switch (data.code){
+          case 0:
+            window.location.href = '/'
+          break
+        }
+      })
+    })
+  </script>
 </body>
 
 </html>
