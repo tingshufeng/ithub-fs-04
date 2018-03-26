@@ -1,5 +1,14 @@
 const {query} = require('../utilities/db-helper')
 
+exports.findAll = callback => {
+	query('SELECT * FROM `topics`',callback)
+}
+
+// 通过分类id查询该分类的所有话题
+exports.findByCategoryId = (categoryId,callback) => {
+	const sqlStr = 'SELECT * FROM `topics` WHERE `categoryId` = ?'
+	query(sqlStr,[categoryId],callback)
+}
 
 exports.findById = (id,callback) => {
 	const sqlStr = 'SELECT * FROM `topics` WHERE `id` = ?'
