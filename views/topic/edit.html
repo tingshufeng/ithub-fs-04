@@ -10,33 +10,65 @@
   {{include '../_includes/header.html'}}
   <section class="container">
   <div class="row">
-    <div class="col-md-5">
-      <form>
+    <div class="col-md-8">
+      {{if !topic}}
+         <div class="alert alert-danger" role="alert">此话题不存在或已被删除。</div>
+      {{else if topic.userId !== user.id}}
+         <div class="alert alert-danger" role="alert">对不起，您没有编辑该话题的权限。</div>
+      {{else}}
+      <form id="form" method="post" action="/topic/create">
         <div class="form-group">
-          <label for="exampleInputEmail1">选择板块</label>
-          <select class="form-control">
-            <option>分享</option>
-            <option>问答</option>
-            <option>招聘</option>
-            <option>客户端测试</option>
+          <label for="category">选择板块</label>
+          <select class="form-control" name="categoryId" id="category">
+            {{each topicCategorys}}
+              {{if topic.categoryId === $value.id}}
+                <option value="{{$value.id}}" selected>{{$value.name}}</option>
+              {{else}}
+                <option value="{{$value.id}}">{{$value.name}}</option>
+              {{/if}}
+            {{/each}}
           </select>
         </div>
         <div class="form-group">
-          <label for="exampleInputEmail1">标题</label>
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+          <label for="title">标题</label>
+          <input type="text" class="form-control" id="title" placeholder="title" name="title" value="{{topic.title}}">
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">内容</label>
-          <textarea class="form-control" rows="3"></textarea>
+          <label for="content">内容</label>
+          <textarea class="form-control" rows="3" id="content" name="content">{{topic.content}}</textarea>
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
+      {{/if}}
     </div>
   </div>
 </section>
   {{include '../_includes/footer.html'}}
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/editor/0.1.0/editor.css">
+  <script src="//cdn.jsdelivr.net/editor/0.1.0/editor.js"></script>
+  <script src="//cdn.jsdelivr.net/editor/0.1.0/marked.js"></script>
+  <script src="/node_modules/jquery-form/dist/jquery.form.min.js"></script>
+  <script type="text/javascript">
+    // 富文本编辑器初始化
+    const editor = new Editor()
+    editor.render()
+
+    $form = $('#form')
+    $form.on('submit',function(e){
+      e.preventDefault()
+      $form.ajaxSubmit(function(data){
+        // console.log(data)
+        switch (data.code){
+          case 0:
+            window.location.href = data.address.redirect
+          break
+        }
+      })
+      // console.log(editor.codemirror.getValue())
+    })
+  </script>
 </body>
 
 </html>

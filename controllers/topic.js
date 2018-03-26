@@ -1,22 +1,23 @@
 const topic = require('../models/topic')
+const topicCategory = require('../models/topic-category')
 const marked = require('marked')
 const moment = require('moment')
 
 // 展示话题表单
 exports.showCreate = (req,res,next) => {
 	// res.send('get showCreate')
-	topic.findAll((err,topics) => {
+	topicCategory.findAll((err,topicCategory) => {
 		if(err){
 			return next(err)
 		}
 		res.render('topic/create.html',{
-			topics
+			topicCategory
 		})
 	})
 	
 }
 
-// 出来添加话题请求
+// 处理添加话题请求
 exports.create = (req,res,next) => {
 	// res.send('post create')
 	// 1、获取表单提交的数据
@@ -68,7 +69,25 @@ exports.showDetail = (req,res,next) => {
 }
 
 exports.showEdit = (req,res,next) => {
-	res.send('get showEdit')
+	// res.render('topic/edit.html')
+	const {topicId} = req.params
+	// 查询话题分类id
+	topicCategory.findAll((err,topicCategorys) => {
+		if(err){
+			return next(err)
+		}
+		// 根据话题id查询话题标题和内容
+		topic.findById(topicId,(err,topic) => {
+			if(err){
+				return next(err)
+			}
+			res.render('topic/edit.html',{
+				topic,
+				topicCategorys
+			})
+		})
+	})
+	
 }
 
 exports.edit = (req,res,next) => {

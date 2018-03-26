@@ -28,7 +28,7 @@
 
       {{if topic.userId === user.id}}
         <p>
-          <a href="#">编辑</a>
+          <a href="/topic/{{topic.id}}/edit">编辑</a>
           <a href="/topic/{{topic.id}}/delete" id="remove">删除</a>
         </p>
       {{/if}}

@@ -1,8 +1,5 @@
 const {query} = require('../utilities/db-helper')
 
-exports.findAll = callback => {
-	query('SELECT * FROM `topic_categories`',callback)
-}
 
 exports.findById = (id,callback) => {
 	const sqlStr = 'SELECT * FROM `topics` WHERE `id` = ?'
