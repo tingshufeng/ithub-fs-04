@@ -91,7 +91,56 @@ exports.showEdit = (req,res,next) => {
 }
 
 exports.edit = (req,res,next) => {
-	res.send('post edit')
+	// res.send('post edit')
+	const {topicId} = req.params
+	// topic.findById(topicId,(err,result) => {
+	// 	if(err){
+	// 		return next(err)    // 服务端错误
+	// 	}
+	// 	// 如果当前话题不存在
+	// 	if(!result){
+	// 		return res.status(200).json({
+	// 			code: 1,
+	// 			message: '对不起，该资源已不存在！'
+	// 		})
+	// 	}
+	// 	// 如果服务端没有错误并查到了当前话题 信息
+	// 	// 判断当前话题的用户id是不是当前登录用户的id
+	// 	if(result.userId !== req.session.user.id){
+	// 		return res.status(200).json({
+	// 			code: 2,
+	// 			message: '对不起，您没有权限删除该话题'
+	// 		})
+	// 	}
+	// 	// 编辑话题
+	// 	topic.findByIdAndUpdate(topicId,req.body,(err,result) => {
+	// 		if(err){
+	// 			return next(err)
+	// 		}
+	// 		res.status(200).json({
+	// 			code: 0,
+	// 			address: {
+	// 				redirect: `/topic/${topicId}`
+	// 			},
+	// 			message: 'success'
+	// 		})
+	// 	})
+	// })
+
+	// 编辑话题
+	topic.findByIdAndUpdate(topicId,req.body,(err,result) => {
+		if(err){
+			return next(err)
+		}
+		res.status(200).json({
+			code: 0,
+			address: {
+				redirect: `/topic/${topicId}`
+			},
+			message: 'success'
+		})
+	})
+	
 }
 
 // 处理删除请求
@@ -99,34 +148,45 @@ exports.delete = (req,res,next) => {
 	const {topicId} = req.params
 	// console.log(topicId)
 	// 根据当前的话题ID查询当前登录的用户ID
-	topic.findById(topicId,(err,result) => {
+	// topic.findById(topicId,(err,result) => {
+	// 	if(err){
+	// 		return next(err)    // 服务端错误
+	// 	}
+	// 	// 如果当前话题不存在
+	// 	if(!result){
+	// 		return res.status(200).json({
+	// 			code: 1,
+	// 			message: '对不起，该资源已不存在！'
+	// 		})
+	// 	}
+	// 	// 如果服务端没有错误并查到了当前话题 信息
+	// 	// 判断当前话题的用户id是不是当前登录用户的id
+	// 	if(result.userId !== req.session.user.id){
+	// 		return res.status(200).json({
+	// 			code: 2,
+	// 			message: '对不起，您没有权限删除该话题'
+	// 		})
+	// 	}
+	// 	// 删除话题
+	// 	topic.findByIdAndRemove(topicId,(err,results) => {
+	// 		if(err){
+	// 			return next(err)
+	// 		}
+	// 		return res.status(200).json({
+	// 			code: 0,
+	// 			message: 'success'
+	// 		})
+	// 	})
+	// })
+
+	// 删除话题
+	topic.findByIdAndRemove(topicId,(err,results) => {
 		if(err){
-			return next(err)    // 服务端错误
+			return next(err)
 		}
-		// 如果当前话题不存在
-		if(!result){
-			return res.status(200).json({
-				code: 1,
-				message: '对不起，该资源已不存在！'
-			})
-		}
-		// 如果服务端没有错误并查到了当前话题 信息
-		// 判断当前话题的用户id是不是当前登录用户的id
-		if(result.userId !== req.session.user.id){
-			return res.status(200).json({
-				code: 2,
-				message: '对不起，您没有权限删除该话题'
-			})
-		}
-		// 删除话题
-		topic.findByIdAndRemove(topicId,(err,results) => {
-			if(err){
-				return next(err)
-			}
-			return res.status(200).json({
-				code: 0,
-				message: 'success'
-			})
+		return res.status(200).json({
+			code: 0,
+			message: 'success'
 		})
 	})
 	

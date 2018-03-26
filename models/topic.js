@@ -11,6 +11,11 @@ exports.findById = (id,callback) => {
 	})
 }
 
+exports.findByIdAndUpdate = (id,topic,callback) => {
+	const sqlStr = 'UPDATE `topics` SET `title` = ?,`content` = ?,`categoryId` = ? WHERE `id` = ?'
+	query(sqlStr,[topic.title,topic.content,topic.categoryId,id],callback)
+}
+
 exports.findByIdAndRemove = (id,callback) => {
 	const sqlStr = 'DELETE FROM `topics` WHERE `id` = ?'
 	query(sqlStr,[id],callback)

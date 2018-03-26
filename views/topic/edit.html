@@ -16,7 +16,7 @@
       {{else if topic.userId !== user.id}}
          <div class="alert alert-danger" role="alert">对不起，您没有编辑该话题的权限。</div>
       {{else}}
-      <form id="form" method="post" action="/topic/create">
+      <form id="form" method="post" action="/topic/{{topic.id}}/edit">
         <div class="form-group">
           <label for="category">选择板块</label>
           <select class="form-control" name="categoryId" id="category">
@@ -63,6 +63,12 @@
         switch (data.code){
           case 0:
             window.location.href = data.address.redirect
+          break
+          case 1:
+            window.alert('对不起，该话题已不存在！')
+          break
+          case 2:
+            window.alert('对不起，您没有编辑该话题的权限！')
           break
         }
       })
